@@ -12,16 +12,19 @@ function TextForm(props) {
     const handUpClick = () => {
         let newText = text.toUpperCase(); 
         setText(newText)
+        props.showAlert("Converted to Uppecase!", "success")
     }
 
     const handLoClick = () => {
         let newText = text.toLowerCase(); 
         setText(newText)
+        props.showAlert("Converted to Lowercase!", "success")
     }
 
     const handclearClick = () => {
         let newText = ""; 
         setText(newText)
+        props.showAlert("Cleared the text area", "success")
     }
 
     // const speak = () => {
@@ -38,9 +41,12 @@ function TextForm(props) {
             msg.text = text;
             window.speechSynthesis.speak(msg);
             setIsSpeaking(true); // Set isSpeaking to true when speaking starts
+            props.showAlert("Speaking!", "success")
         } else {
             window.speechSynthesis.cancel(); // Stop speaking
             setIsSpeaking(false); // Set isSpeaking to false when speaking stops
+            props.showAlert("Stopped speaking!", "success")
+
         }
     }
 
@@ -54,11 +60,14 @@ function TextForm(props) {
         }
 
         setText(temp)
+        props.showAlert("Capitalized!", "success")
+
     }
 
     const removeWhiteSpace = () => {
         let updatedText = text.replace(/\s/g, '');
         setText(updatedText);
+        props.showAlert("Removed white space!", "success")
     };
 
     const calculateReadingTime = () => {
@@ -78,19 +87,23 @@ function TextForm(props) {
         var text = document.getElementById("my-box");
         text.select(); 
         navigator.clipboard.writeText(text.value)
+        props.showAlert("Text copied!", "success")
+
     }
 
     const handleExtraSpaces= () => {
         let newText = text.split(/[ ]+/); 
         setText(newText.join(" "))
+        props.showAlert("Deleted extra spaces!", "success")
     }
     
     return (
         <>
-        <div className='container '>
+        <div className="mt-4 container rounded-4" style={{ backgroundColor: props.mode === 'dark' ? 'black' : 'white', color: props.mode === 'dark' ? 'white' : 'black' }}>
             <h1>{props.heading}</h1>
+
             <div className="mb-3">
-                <textarea className="form-control" value={text} onChange={handleOnChange} id="my-box" cols="30" rows="15"></textarea>
+                <textarea className="form-control" value={text} onChange={handleOnChange} style={{backgroundColor: props.mode === 'dark'? 'grey':'white', color: props.mode === 'dark'? 'white':'black'}} id="my-box" cols="30" rows="15"></textarea>
             </div>
             
             <button className="btn btn-warning mx-2 my-2" onClick={handUpClick}>Convert to Upper Case</button>
@@ -103,8 +116,9 @@ function TextForm(props) {
             <button className="btn btn-warning mx-2 my-2" onClick={handclearClick}>Clear</button>
 
         </div>
-        <div className="container my-3">
-            <h2>Your text Summary</h2>
+        
+        <div className="container my-3" style={{ backgroundColor: props.mode === 'dark' ? 'grey' : 'white', color: props.mode === 'dark' ? 'white' : 'black' }}>
+            <h2>Reading time</h2>
             {/* <p>{text.split(" ").length - 1} Words, {text.length} characters</p> */}
             <div>
             <p>{calculateReadingTime()}</p>

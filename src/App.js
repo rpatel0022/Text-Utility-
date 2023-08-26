@@ -1,20 +1,46 @@
 
 import './App.css';
 import Navbar from './components/Navbar';
-import Forms from './components/TextForm'
+import TextForm from './components/TextForm'
 import Footer from './components/Footer';
 import React, {useState} from 'react'
+import Alert from './components/Alert';
 // import About from './components/About'
 
 function App() {
-  const[mode, setMode] = useState('dark'); 
+  const[mode, setMode] = useState('light'); 
+  const[alert, setAlert] = useState(null); 
+
+  let showAlert = (message, type) =>{
+    setAlert({
+      msg: message,
+      type: type
+    })
+    setTimeout(() =>{
+      setAlert(null); 
+    }, 1500); 
+
+  }
+  const toggleMode = () =>{
+    if (mode === 'light'){
+      setMode('dark')
+      document.body.style.backgroundColor = "grey"
+      showAlert("Dark Mode has been enabled", "success")
+    }
+    else{
+      setMode('light')
+      document.body.style.backgroundColor = "white"
+      showAlert("Light Mode has been enabled", "success")
+    }
+  }
 
   return (
     <>
-      <Navbar title="TextUtiles" aboutText="About us" mode={mode}/>
+      <Navbar title="TextUtiles" mode={mode} toggleMode={toggleMode}/>
+      <Alert alert={alert}/>
       <div className="container my-3" mode={mode}>
       {/* <About/> */}
-      <Forms heading="Enter the text to Analyze" mode={mode}/>
+      <TextForm showAlert={showAlert} heading="Enter the text to Analyze" mode={mode}/>
       <Footer/>
       </div>
     </>
